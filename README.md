@@ -5,13 +5,13 @@ Repository contains:
 Terraform also creates IAM roles:
     - node_group_role_arn: should be attached to EKS node group
     - ingress_controller_role_arn: should be attached to alb ingress controller pod
-    (by setting podAnnotations."iam\.amazonaws\.com/role"=[generated_arn] variable while installing ingress controller helm chart)
+    (by setting podAnnotations."iam\.amazonaws\.com/role"=[ingress_controller_role_name] variable while installing ingress controller helm chart)
 - Helm charts to setup [kube2iam](https://github.com/jtblin/kube2iam) and aws-alb-ingress-controller
 - Few K8s manifest files to deploy simple replication controller for pods with nginx server or simple hello-world container from pluralsight course
 - K8s manifest file to deploy service of LoadBalancer or NodePort type (NodePort type needed if you want to use ingress)
 - K8s manifest files to configure ingress for service from previous step
 
-###VPC architecture:
+### VPC architecture:
 It is terraformed version of AWS cloudformation [stack](https://amazon-eks.s3.us-west-2.amazonaws.com/cloudformation/2020-04-21/amazon-eks-vpc-private-subnets.yaml)
 This VPC has two public and two private subnets. 
 One public and one private subnet are deployed to the same Availability Zone.
@@ -29,7 +29,7 @@ The subnets are tagged so that Kubernetes is able to deploy load balancers to th
 For more information about subnet tagging, see [Subnet tagging requirement](https://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html#vpc-subnet-tagging). 
 For more information about this type of VPC, see [VPC with public and private subnets (NAT)](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Scenario2.html). 
 
-###Requirements (tested on MacOS):
+### Requirements (tested on MacOS):
 
 - helm (tested with v3.1.2)
 - aws-iam-authenticator (tested with v0.5.0) - in some cases might not be needed
@@ -40,7 +40,7 @@ For more information about this type of VPC, see [VPC with public and private su
 
 see [this](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html) guide
 
-###How to run it:
+### How to run it:
 
 1. In `terraform` directory run `terraform apply -var eks_cluster_name=[name_of_cluster]`. You can modify manually terraform variables if needed (in `terraform/main.tf`)
 2. Set correct cluster name and subnet ids in `cluster_without_nodes.yaml` and Run `eksctl create cluster -f cluster_without_nodes.yaml`
